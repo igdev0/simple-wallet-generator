@@ -6,12 +6,15 @@ import store, {persistor} from './store';
 
 import './index.css';
 import {PersistGate} from 'redux-persist/integration/react';
+import AppProvider from './context.tsx';
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <App/>
+          <AppProvider>
+            <App/>
+          </AppProvider>
         </PersistGate>
       </Provider>
     </StrictMode>,

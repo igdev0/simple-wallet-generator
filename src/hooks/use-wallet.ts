@@ -1,51 +1,60 @@
 import {useSelector} from 'react-redux';
 import {type RootState, useAppDispatch} from '../store';
-import {type HDNodeWallet, Wallet} from 'ethers';
-import {generateAccount, setEncryptedMaster, setError, setLocked} from '../store/wallet.ts';
-import {useState} from 'react';
+import {HDNodeWallet, Wallet} from 'ethers';
+import {clearError, generateAccount, setEncryptedMaster, setError, setLocked} from '../store/wallet.ts';
+import {useContext} from 'react';
+import {AppContext} from '../context.tsx';
 
 export default function useWallet() {
-  const store = useSelector((state: RootState) => state);
-  const [master, setMaster] = useState<HDNodeWallet | null>(null);
+  const {master, setMaster} = useContext(AppContext);
+  const store = useSelector((state: RootState) => ({
+    accounts: state.accounts,
+    encryptedMaster: state.encryptedMaster,
+    error: state.error,
+    isLocked: state.isLocked,
+  }));
   const dispatch = useAppDispatch();
 
   const generateRandomMasterEncrypted = async (formData: FormData) => {
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirm-password") as string;
     if (!password) {
-      setError("Password is required");
+      dispatch(setError("Password is required"));
       return;
     }
     if (password !== confirmPassword) {
-      setError("Passwords don't match");
-      return
+      dispatch(setError("Passwords don't match"));
+      return;
     }
     try {
-      const encrypted = await Wallet.createRandom().encrypt(password);
+      const wallet = Wallet.createRandom();
+      const encrypted = await wallet.encrypt(password);
       dispatch(setEncryptedMaster(encrypted));
+      dispatch(generateAccount(wallet));
+      dispatch(clearError());
     } catch (err) {
-      setError((err as Error).message);
+      dispatch(setError((err as Error).message));
     }
   };
 
   const generateWallet = async () => {
     if (!master) {
-      setError("Master is required");
+      dispatch(setError("Master is required"));
       return;
     }
-    const child = master.deriveChild(store.accounts.length);
+    const child = master.deriveChild(store.accounts.length + 1);
     dispatch(generateAccount(child));
   };
 
   const getWallet = async (address: string) => {
     if (!master) {
-      setError("Master is required");
+      dispatch(setError("Master is required"));
       return;
     }
     const account = store.accounts.find(account => account.address === address);
 
     if (!account) {
-      setError("Could not find account");
+      dispatch(setError("Could not find account"));
       return;
     }
 
@@ -55,26 +64,55 @@ export default function useWallet() {
   const authenticate = async (formData: FormData) => {
     const password = formData.get("password") as string;
     if (!store.encryptedMaster) {
-      setError("Master wallet does not exist");
-      return
+      dispatch(setError("Master wallet does not exist"));
+      return;
     }
     if (!password) {
-      setError("Password is required");
-      return
+      dispatch(setError("Password is required"));
+      return;
     }
     try {
       const decrypted = await Wallet.fromEncryptedJson(store.encryptedMaster as string, password);
       setMaster(decrypted as HDNodeWallet);
       dispatch(setLocked(false));
+      dispatch(clearError());
     } catch (err) {
-      setError((err as Error).message);
+      dispatch(setError((err as Error).message));
     }
   };
+
+  const getPrivateKey = async (address: string, password: string) => {
+    const account = store.accounts.find(account => account.address === address);
+    if (!account) {
+      dispatch(setError("Could not find account address"));
+      return;
+    }
+    if (!master) {
+      dispatch(setError("Master is not unlocked"));
+      return;
+    }
+
+    try {
+      await Wallet.fromEncryptedJson(store.encryptedMaster as string, password);
+      const wallet = master.deriveChild(account.index);
+      dispatch(clearError());
+      return wallet.privateKey;
+    } catch (err) {
+      dispatch(setError((err as Error).message));
+    }
+
+  };
+
+  const clearErrors = () => {
+    dispatch(clearError());
+  }
 
   return {
     ...store,
     master,
+    clearErrors,
     authenticate,
+    getPrivateKey,
     generateWallet,
     getWallet,
     generateRandomMasterEncrypted,

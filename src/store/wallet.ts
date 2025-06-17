@@ -4,8 +4,9 @@ import storage from 'redux-persist/lib/storage';
 import type {PersistConfig} from 'redux-persist/es/types';
 import {HDNodeWallet} from 'ethers';
 
-interface Account {
+export interface Account {
   name: string;
+  index: number;
   path: string;
   address: string;
 }
@@ -42,8 +43,13 @@ const walletSlice = createSlice({
       state.error = action.payload;
     },
 
+    clearError(state) {
+      state.error = null;
+    },
+
     generateAccount(state, action: { payload: HDNodeWallet }) {
       state.accounts.push({
+        index: action.payload.index,
         name: `Account ${state.accounts.length}`,
         path: action.payload.path as string,
         address: action.payload.address,
@@ -58,6 +64,6 @@ const persistConfig = {
   whitelist: ['accounts', 'encryptedMaster'],
 } as PersistConfig<any>;
 
-export const {generateAccount, setLocked, setError, setEncryptedMaster} = walletSlice.actions;
+export const {generateAccount, setLocked, setError, setEncryptedMaster, clearError} = walletSlice.actions;
 
 export default persistReducer(persistConfig, walletSlice.reducer);
