@@ -20,6 +20,10 @@ function WalletUI({account}: WalletUIProps) {
     setUnlockPrivateKey(false);
   };
 
+  const refreshBalances = () => {
+    wallet.getBalances(account.address).then(setBalances);
+  };
+
   useEffect(() => {
     wallet.getBalances(account.address).then(setBalances);
   }, [account]);
@@ -29,14 +33,14 @@ function WalletUI({account}: WalletUIProps) {
 
         <div key={account.address}>
           <h3>{account.name}</h3>
-          <p><strong>✉️: {account.address}</strong></p>
+          <p><strong className="key">✉️: {account.address}</strong></p>
           <h3>Balances:</h3>
           {balances && Object.keys(balances).map((key: string) => (
               <p key={key}>
                 {key} : {balances[key]}
               </p>
           ))}
-          {privateKey && <p><strong>🔐: {privateKey}</strong></p>}
+          {privateKey && <div><strong className="key">🔐: {privateKey}</strong></div>}
           {
               unlockPrivateKey && (
                   <form action={getPrivateKey}>
@@ -46,9 +50,12 @@ function WalletUI({account}: WalletUIProps) {
                   </form>
               )
           }
-          {!privateKey && !unlockPrivateKey &&
-              <button onClick={() => setUnlockPrivateKey(true)}>👀 See Private key</button>}
-          {privateKey && <button onClick={() => setPrivateKey(null)}>Hide private key 🔐</button>}
+          <div className="wallet-card-buttons">
+            {!privateKey && !unlockPrivateKey &&
+                <button onClick={() => setUnlockPrivateKey(true)}>👀 See Private key</button>}
+            {privateKey && <button onClick={() => setPrivateKey(null)}>Hide private key 🔐</button>}
+            <button onClick={refreshBalances}>Refresh Balance</button>
+          </div>
         </div>
       </div>
   );
@@ -92,12 +99,14 @@ function App() {
               ) :
               <>
                 <button onClick={wallet.generateWallet}>Generate wallet</button>
-                <h1>Generate wallet</h1>
-                {
-                  wallet.accounts.map((account) => (
-                      <WalletUI account={account}/>
-                  ))
-                }
+                <h1>Your wallets</h1>
+                <div className="wallets">
+                  {
+                    wallet.accounts.map((account) => (
+                        <WalletUI account={account}/>
+                    ))
+                  }
+                </div>
               </>
         }
       </div>
