@@ -15,8 +15,8 @@ export default function useWallet() {
   }));
   const dispatch = useAppDispatch();
 
-  const getBalances = async (address:string) => {
-    const balances: {[key: string]: string} = {};
+  const getBalances = async (address: string) => {
+    const balances: { [key: string]: string } = {};
     for (let network in rpcProviders) {
       const provider = rpcProviders[network];
       const balance = await provider.send("eth_getBalance", [address, "latest"]);
@@ -48,7 +48,7 @@ export default function useWallet() {
         path: wallet.path as string,
         name: `Account ${wallet.index}`
       }));
-      setMaster(wallet);
+      setMaster(wallet.neuter());
       dispatch(clearError());
     } catch (err) {
       dispatch(setError((err as Error).message));
@@ -96,8 +96,8 @@ export default function useWallet() {
       return;
     }
     try {
-      const decrypted = await Wallet.fromEncryptedJson(store.encryptedMaster as string, password);
-      setMaster(decrypted as HDNodeWallet);
+      const decrypted = (await Wallet.fromEncryptedJson(store.encryptedMaster as string, password)) as HDNodeWallet;
+      setMaster(decrypted.neuter());
       dispatch(setLocked(false));
       dispatch(clearError());
     } catch (err) {
@@ -117,10 +117,12 @@ export default function useWallet() {
     }
 
     try {
-      await Wallet.fromEncryptedJson(store.encryptedMaster as string, password);
-      const wallet = master.deriveChild(account.index);
+      const decryptedWallet = await Wallet.fromEncryptedJson(store.encryptedMaster as string, password) as HDNodeWallet;
+      if (decryptedWallet.index === account.index) {
+        return decryptedWallet.privateKey;
+      }
       dispatch(clearError());
-      return wallet.privateKey;
+      return decryptedWallet.derivePath(`${account.index}`).privateKey;
     } catch (err) {
       dispatch(setError((err as Error).message));
     }
