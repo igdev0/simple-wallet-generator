@@ -60,4 +60,6 @@ const persistConfig = {
 
 export const {generateAccount, setLocked, setError, setEncryptedMaster, clearError} = walletSlice.actions;
 
+export const walletReducer = walletSlice.reducer;
+
 export default persistReducer(persistConfig, walletSlice.reducer);
