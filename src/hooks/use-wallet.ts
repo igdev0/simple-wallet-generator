@@ -30,8 +30,10 @@ export default function useWallet() {
       const wallet = Wallet.createRandom();
       const encrypted = await wallet.encrypt(password);
       dispatch(setEncryptedMaster(encrypted));
+      dispatch(setLocked(false));
       dispatch(generateAccount(wallet));
       dispatch(clearError());
+      setMaster(wallet);
     } catch (err) {
       dispatch(setError((err as Error).message));
     }
