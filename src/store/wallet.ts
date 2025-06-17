@@ -2,7 +2,6 @@ import {createSlice} from '@reduxjs/toolkit';
 import {persistReducer} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import type {PersistConfig} from 'redux-persist/es/types';
-import {HDNodeWallet} from 'ethers';
 
 export interface Account {
   name: string;
@@ -47,13 +46,8 @@ const walletSlice = createSlice({
       state.error = null;
     },
 
-    generateAccount(state, action: { payload: HDNodeWallet }) {
-      state.accounts.push({
-        index: action.payload.index,
-        name: `Account ${state.accounts.length}`,
-        path: action.payload.path as string,
-        address: action.payload.address,
-      });
+    generateAccount(state, action: { payload: Account }) {
+      state.accounts.push(action.payload);
     },
   }
 });

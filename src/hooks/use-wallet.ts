@@ -1,12 +1,12 @@
 import {useSelector} from 'react-redux';
 import {type RootState, useAppDispatch} from '../store';
-import {HDNodeWallet, Wallet} from 'ethers';
+import {ethers, HDNodeWallet, Wallet} from 'ethers';
 import {clearError, generateAccount, setEncryptedMaster, setError, setLocked} from '../store/wallet.ts';
 import {useContext} from 'react';
 import {AppContext} from '../context.tsx';
 
 export default function useWallet() {
-  const {master, setMaster} = useContext(AppContext);
+  const {master, setMaster, rpcProviders} = useContext(AppContext);
   const store = useSelector((state: RootState) => ({
     accounts: state.accounts,
     encryptedMaster: state.encryptedMaster,
@@ -14,6 +14,16 @@ export default function useWallet() {
     isLocked: state.isLocked,
   }));
   const dispatch = useAppDispatch();
+
+  const getBalances = async (address:string) => {
+    const balances: {[key: string]: string} = {};
+    for (let network in rpcProviders) {
+      const provider = rpcProviders[network];
+      const balance = await provider.send("eth_getBalance", [address, "latest"]);
+      balances[network] = ethers.formatEther(balance);
+    }
+    return balances;
+  };
 
   const generateRandomMasterEncrypted = async (formData: FormData) => {
     const password = formData.get("password") as string;
@@ -29,23 +39,35 @@ export default function useWallet() {
     try {
       const wallet = Wallet.createRandom();
       const encrypted = await wallet.encrypt(password);
+
       dispatch(setEncryptedMaster(encrypted));
       dispatch(setLocked(false));
-      dispatch(generateAccount(wallet));
-      dispatch(clearError());
+      dispatch(generateAccount({
+        index: wallet.index,
+        address: wallet.address,
+        path: wallet.path as string,
+        name: `Account ${wallet.index}`
+      }));
       setMaster(wallet);
+      dispatch(clearError());
     } catch (err) {
       dispatch(setError((err as Error).message));
     }
   };
+
 
   const generateWallet = async () => {
     if (!master) {
       dispatch(setError("Master is required"));
       return;
     }
-    const child = master.deriveChild(store.accounts.length + 1);
-    dispatch(generateAccount(child));
+    const wallet = master.deriveChild(store.accounts.length + 1);
+    dispatch(generateAccount({
+      index: wallet.index,
+      address: wallet.address,
+      path: wallet.path as string,
+      name: `Account ${wallet.index}`
+    }));
   };
 
   const getWallet = async (address: string) => {
@@ -102,16 +124,16 @@ export default function useWallet() {
     } catch (err) {
       dispatch(setError((err as Error).message));
     }
-
   };
 
   const clearErrors = () => {
     dispatch(clearError());
-  }
+  };
 
   return {
     ...store,
     master,
+    getBalances,
     clearErrors,
     authenticate,
     getPrivateKey,
