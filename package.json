@@ -8,9 +8,10 @@
   "scripts": {
     "dev": "vite",
     "test": "jest",
+    "e2e:open": "cypress open",
+    "e2e:run": "cypress run",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "e2e:browser": "cypress open",
     "preview": "vite preview"
   },
   "dependencies": {
