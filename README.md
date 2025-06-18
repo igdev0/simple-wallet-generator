@@ -17,12 +17,6 @@ git clone https://github.com/your-username/simple-wallet-generator.git && cd sim
 npm install
 ```
 
-3. Copy & setup the environment variables
-
-```bash
-cp .env.example .env
-```
-
 ## Start the project
 
 ```bash
