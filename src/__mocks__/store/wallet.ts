@@ -47,11 +47,8 @@ export const walletReducer = jest.fn((state: any = mockWalletState, action:any) 
 });
 
 
-// Export the mocked reducer as default, mimicking your original file
-// This is what `configureStore` in `src/store/__mocks__/index.ts` will receive.
 export default walletReducer;
 
-// Helper to reset wallet-specific mocks
 export const resetWalletMocks = (initialState?: any) => {
   mockWalletState = initialState || {
     encryptedMaster: null,
@@ -59,7 +56,6 @@ export const resetWalletMocks = (initialState?: any) => {
     isLocked: true,
     error: null,
   };
-  // Reset mock implementations of action creators if needed
   setEncryptedMaster.mockClear();
   setLocked.mockClear();
   setError.mockClear();
