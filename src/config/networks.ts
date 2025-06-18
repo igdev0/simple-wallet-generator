@@ -5,15 +5,23 @@ export interface NetworkConfig {
   rpcUrl: string;
 }
 
+if(!import.meta.env.VITE_ETH_TESTNET_URL) {
+  throw new Error("Environment variable VITE_ETH_TESTNET_URL is missing");
+}
+
+
+if(!import.meta.env.VITE_BNB_TESTNET_URL) {
+  throw new Error("Environment variable VITE_BNB_TESTNET_URL is missing");
+}
 
 export const NETWORKS: NetworkConfig[] = [
   {
-    name: "Sepolia",
-    rpcUrl: "https://eth-sepolia.g.alchemy.com/v2/sxSyhMABmXFYFkxAiZSr1uM6qP2twS4d", // Example public RPC
+    name: import.meta.env?.VITE_ETH_TESTNET_NAME ?? "Sepolia",
+    rpcUrl: import.meta.env.VITE_ETH_TESTNET_URL, // Example public RPC
   },
   {
-    name: "BNB Smart Chain Testnet",
-    rpcUrl: "https://bnb-testnet.g.alchemy.com/v2/sxSyhMABmXFYFkxAiZSr1uM6qP2twS4d",
+    name: import.meta.env?.VITE_BNB_TESTNET_NAME ?? "BNB Smart Chain Testnet",
+    rpcUrl: import.meta.env.VITE_BNB_TESTNET_URL,
   },
 ];
 
