@@ -1,7 +1,8 @@
+const mockedStorage = new Map<string, any>();
 const storage = {
-  getItem: jest.fn(() => Promise.resolve(null)),
-  setItem: jest.fn(() => Promise.resolve()),
-  removeItem: jest.fn(() => Promise.resolve()),
+  getItem: (key: string) => mockedStorage.get(key),
+  setItem: (key: string, value: string) => mockedStorage.set(key, value),
+  removeItem: (key: string) => mockedStorage.delete(key),
 };
 
 export default storage;
