@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler", // Recommended for this flag
+    "esModuleInterop": true
+  }
+}

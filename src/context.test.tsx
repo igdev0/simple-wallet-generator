@@ -1,6 +1,7 @@
+
 import {act, render, screen} from '@testing-library/react';
 import AppProvider, {AppContext} from './context.tsx';
-import * as React from 'react';
+import React from 'react';
 import {useContext} from 'react';
 import {Wallet} from 'ethers';
 import {mockedNeuterWallet} from './__mocks__/ethers.ts';
@@ -33,7 +34,7 @@ describe('AppContext renders', () => {
     const setState = jest.fn();
 
     jest
-        .spyOn(React, 'useState')
+        .spyOn(React,  'useState')
         // @ts-expect-error
         .mockImplementationOnce((initState: any) => [initState, setState]);
     render(<AppProvider><Consumer/></AppProvider>);

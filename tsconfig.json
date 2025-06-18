@@ -2,7 +2,6 @@
   "files": [],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "allowImportingTsExtensions": true
   },
   "references": [
     {

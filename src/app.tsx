@@ -46,15 +46,15 @@ function WalletUI({account}: WalletUIProps) {
                   <form action={getPrivateKey}>
                     <label>Your password</label>
                     <input type="password" autoFocus id="password" name="password" placeholder="Password" required/>
-                    <button>Submit</button>
+                    <button data-testid="submit-password">Submit</button>
                   </form>
               )
           }
           <div className="wallet-card-buttons">
             {!privateKey && !unlockPrivateKey &&
-                <button onClick={() => setUnlockPrivateKey(true)}>👀 See Private key</button>}
-            {privateKey && <button onClick={() => setPrivateKey(null)}>Hide private key 🔐</button>}
-            <button onClick={refreshBalances}>Refresh Balance</button>
+                <button data-testid="see-private-key" onClick={() => setUnlockPrivateKey(true)}>👀 See Private key</button>}
+            {privateKey && <button data-testid="hide-private-key" onClick={() => setPrivateKey(null)}>Hide private key 🔐</button>}
+            <button data-testid="refresh-balance" onClick={refreshBalances}>Refresh Balance</button>
           </div>
         </div>
       </div>
@@ -94,11 +94,11 @@ function App() {
                       <label htmlFor="password">Password</label>
                       <input type="password" id="password" name="password" placeholder="Enter password"/>
                     </fieldset>
-                    <button>Sign in</button>
+                    <button data-testid="sign-in">Sign in</button>
                   </form>
               ) :
               <>
-                <button onClick={wallet.generateWallet}>Generate wallet</button>
+                <button data-testid="generate-new-wallet" onClick={wallet.generateWallet}>Generate wallet</button>
                 <h1>Your wallets</h1>
                 <div className="wallets">
                   {

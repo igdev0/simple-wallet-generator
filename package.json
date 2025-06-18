@@ -1,13 +1,16 @@
 {
   "name": "simple-wallet-generator",
   "private": true,
+  "engines": {
+    "node": "23"
+  },
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "test": "jest",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "e2e:browser": "cypress open",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -26,6 +29,8 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react-swc": "^3.9.0",
+    "cypress": "^14.5.0",
+    "cypress-vite": "^1.6.0",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
