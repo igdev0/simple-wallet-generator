@@ -5,6 +5,7 @@ export interface NetworkConfig {
   rpcUrl: string;
 }
 
+
 export const NETWORKS: NetworkConfig[] = [
   {
     name: "Sepolia",
@@ -16,9 +17,12 @@ export const NETWORKS: NetworkConfig[] = [
   },
 ];
 
+export type ProviderConfig = {
+  [key: string]: JsonRpcProvider;
+}
 
 export const getProviders = () => {
-  const providers: { [key: string]: JsonRpcProvider } = {};
+  const providers: ProviderConfig = {};
   for (const network of NETWORKS) {
     providers[network.name] = new JsonRpcProvider(network.rpcUrl);
   }

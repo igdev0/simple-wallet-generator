@@ -2,7 +2,7 @@ import {createContext, type PropsWithChildren, useState} from 'react';
 import {type HDNodeVoidWallet} from 'ethers';
 import {getProviders} from './config/networks.ts';
 
-interface AppContext {
+export interface AppContext {
   master: HDNodeVoidWallet | null;
   setMaster: (master: HDNodeVoidWallet) => void;
   rpcProviders?: ReturnType<typeof getProviders>;

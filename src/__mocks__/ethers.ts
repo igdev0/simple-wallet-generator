@@ -1,11 +1,20 @@
 export * from "ethers";
 
 export const mockWalletEncrypt = jest.fn();
-export const mockWalletNeuter = jest.fn();
+export const mockWalletNeuter = jest.fn().mockImplementation(() => mockedNeuterWallet);
 export const mockHDNodeWalletNeuter = jest.fn();
 export const mockHDNodeWalletDeriveChild = jest.fn();
 export const mockHDNodeWalletDerivePath = jest.fn();
 export const mockJsonRpcProviderSend = jest.fn().mockResolvedValue(0);
+
+export const mockedNeuterWallet = {
+  address: '0xMockCreatedWalletAddress',
+  index: 0,
+  path: "m/44'/60'/0'/0/0",
+  encrypt: mockWalletEncrypt,
+  neuter: mockWalletNeuter,
+  getAddress: jest.fn(() => "0xMockCreatedWalletAddress"),
+}
 
 export const Wallet = {
   createRandom: jest.fn(() => ({
