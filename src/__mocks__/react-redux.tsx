@@ -1,8 +1,9 @@
 import {jest} from '@jest/globals';
+import {mockState} from './store';
 
-// export * from "react-redux";
-const mockUseSelector = jest.fn();
+const mockUseSelector = jest.fn(() => mockState);
 export const mockedDispatch = jest.fn();
+
 const mockUseAppDispatch = jest.fn(() => mockedDispatch);
 
 export const useDispatch = jest.fn(() => mockUseAppDispatch());

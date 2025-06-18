@@ -1,7 +1,13 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {useDispatch} from 'react-redux';
+import type {WalletStoreState} from '../../store/wallet.ts';
 
-export let mockState: any = {};
+export let mockState: WalletStoreState = {
+  accounts: [],
+  isLocked: true,
+  error: null,
+  encryptedMaster: null,
+};
 
 export const persistor = {
   persist: jest.fn(),
@@ -28,6 +34,6 @@ export const mockStore = configureStore({
 
 export type RootState = ReturnType<typeof mockStore.getState>;
 
-export const useAppDispatch = useDispatch.withTypes();
+export const useAppDispatch = useDispatch;
 
 export default mockStore

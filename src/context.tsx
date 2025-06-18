@@ -18,8 +18,12 @@ export const AppContext = createContext<AppContext>(initial);
 
 const rpcProviders = getProviders();
 
-export default function AppProvider({children}: PropsWithChildren) {
-  const [master, setMaster] = useState<HDNodeVoidWallet | null>(null);
+export interface AppProviderProps extends PropsWithChildren {
+  initialMaster?: HDNodeVoidWallet | null;
+}
+
+export default function AppProvider({children, initialMaster = null}: AppProviderProps) {
+  const [master, setMaster] = useState<HDNodeVoidWallet | null>(initialMaster);
   return (
       <AppContext.Provider
           value={{master, setMaster, rpcProviders}}>{children}</AppContext.Provider>

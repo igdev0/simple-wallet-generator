@@ -29,7 +29,6 @@ export const generateAccount = jest.fn((payload: any) => ({ // Use 'any' or defi
 
 
 export const walletReducer = jest.fn((state: any = mockWalletState, action:any) => {
-
   switch (action.type) {
     case 'wallet/setEncryptedMaster':
       return { ...state, encryptedMaster: action.payload };

@@ -10,14 +10,14 @@ export interface Account {
   address: string;
 }
 
-interface State {
+export interface WalletStoreState {
   encryptedMaster: string | null;
   accounts: Account[];
   error: string | null;
   isLocked: boolean;
 }
 
-const initialState: State = {
+export const initialState: WalletStoreState = {
   encryptedMaster: null,
   accounts: [],
   isLocked: true,

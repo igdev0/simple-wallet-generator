@@ -1,4 +1,3 @@
-import * as defaultExported from 'ethers';
 import {renderHook} from '@testing-library/react';
 import useWallet from './use-wallet.ts';
 import {mockedEncryptedMasterWallet, mockWalletEncrypt} from '../__mocks__/ethers.ts';
@@ -7,12 +6,6 @@ import {setEncryptedMaster, setError} from '../__mocks__/store/wallet.ts';
 
 
 describe('useWallet', () => {
-
-  it('should be able to create a wallet', () => {
-    const wallet = defaultExported.Wallet.createRandom();
-    expect(wallet.getAddress()).toEqual('0xMockCreatedWalletAddress');
-
-  });
 
   describe('generateMasterWallet', () => {
 
@@ -26,7 +19,7 @@ describe('useWallet', () => {
       expect(mockWalletEncrypt).toHaveBeenCalledWith(data.get("password"));
       expect(mockedDispatch).toHaveBeenCalledTimes(4);
       expect(mockedDispatch).toHaveBeenCalledWith(setEncryptedMaster(mockedEncryptedMasterWallet));
-      mockedDispatch.mockClear()
+      mockedDispatch.mockClear();
     });
 
     it('should not generate master wallet if the passwords don\'t match ', async () => {
@@ -38,6 +31,5 @@ describe('useWallet', () => {
 
       expect(mockedDispatch).toHaveBeenCalledWith(setError("Passwords don't match"));
     });
-  })
-
+  });
 });
