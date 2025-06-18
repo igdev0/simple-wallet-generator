@@ -14,7 +14,7 @@ describe('useWallet', () => {
 
   });
 
-  describe('generateMasterWallet scenarios', () => {
+  describe('generateMasterWallet', () => {
 
     it('should be able to generate master wallet', async () => {
       const {result} = renderHook(() => useWallet());
