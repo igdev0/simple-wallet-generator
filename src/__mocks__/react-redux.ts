@@ -1,9 +1,6 @@
 const mockUseSelector = jest.fn();
 const mockUseAppDispatch = jest.fn();
+export * from "react-redux";
 
-const reactRedux = {
-  useSelector: (selector: any) => mockUseSelector(selector), // Mock and capture selector calls
-  useDispatch: () => mockUseAppDispatch(),
-};
-
-export default reactRedux;
+export const useDispatch = () => mockUseAppDispatch();
+export const useSelector = (selector: any) => mockUseSelector(selector);
