@@ -31,10 +31,14 @@ npm run dev
 
 ## Running the tests
 
-1. End-to-end
+1. End-to-end (make sure the app is running)
 
 ```bash 
-npm run e2e 
+npm run e2e:run
+```
+or 
+```bash
+npm run e2e:open
 ```
 
 2. Unit tests
