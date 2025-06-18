@@ -12,7 +12,6 @@ describe('useWallet', () => {
 
   });
 
-
   it('should be able to generate master wallet', () => {
     const {result} = renderHook(() => useWallet());
     const data = new FormData();
