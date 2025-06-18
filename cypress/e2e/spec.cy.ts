@@ -1,4 +1,3 @@
-import '../../cypress.config';
 
 describe('template spec', () => {
   it('creates a master wallet', async () => {
@@ -11,11 +10,11 @@ describe('template spec', () => {
   it('Generate new wallet', () => {
     const clock = cy.clock();
     cy.visit('/');
-    cy.get('#password').type('password');
-    cy.get('#confirm-password').type('password');
+    clock.wait(200);
+    cy.get('#password').type('other');
+    cy.get('#confirm-password').type('other');
     cy.get('button').click();
-    clock.wait(100);
-    cy.get("[data-testid=generate-new-wallet]").click();
+    cy.get('[data-testid="generate-new-wallet"]').click();
   });
 
   it('View private key', () => {
