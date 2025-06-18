@@ -16,16 +16,18 @@ export const mockedNeuterWallet = {
   getAddress: jest.fn(() => "0xMockCreatedWalletAddress"),
 }
 
+export const mockedWallet = {
+  address: '0xMockCreatedWalletAddress',
+  privateKey: '0xMockCreatedPrivateKey',
+  index: 0,
+  path: "m/44'/60'/0'/0/0",
+  encrypt: mockWalletEncrypt,
+  neuter: mockWalletNeuter,
+  getAddress: jest.fn(() => "0xMockCreatedWalletAddress"),
+}
+
 export const Wallet = {
-  createRandom: jest.fn(() => ({
-    address: '0xMockCreatedWalletAddress',
-    privateKey: '0xMockCreatedPrivateKey',
-    index: 0,
-    path: "m/44'/60'/0'/0/0",
-    encrypt: mockWalletEncrypt,
-    neuter: mockWalletNeuter,
-    getAddress: jest.fn(() => "0xMockCreatedWalletAddress"),
-  })),
+  createRandom: jest.fn(() => (mockedWallet)),
 
   fromEncryptedJson: jest.fn(() => Promise.resolve({
     address: '0xMockDecryptedHDNodeAddress',
