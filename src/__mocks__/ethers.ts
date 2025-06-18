@@ -1,39 +1,36 @@
-const originalEthers = jest.requireActual('ethers'); // Keep original for utilities like formatEther, BigNumberish, etc.
+export * from "ethers";
 
-const mockWalletEncrypt = jest.fn();
-const mockWalletNeuter = jest.fn();
-const mockHDNodeWalletNeuter = jest.fn();
-const mockHDNodeWalletDeriveChild = jest.fn();
-const mockHDNodeWalletDerivePath = jest.fn();
-const mockJsonRpcProviderSend = jest.fn();
-const ethers = {
-  ...originalEthers,
+export const mockWalletEncrypt = jest.fn();
+export const mockWalletNeuter = jest.fn();
+export const mockHDNodeWalletNeuter = jest.fn();
+export const mockHDNodeWalletDeriveChild = jest.fn();
+export const mockHDNodeWalletDerivePath = jest.fn();
+export const mockJsonRpcProviderSend = jest.fn().mockResolvedValue(0);
 
-  Wallet: {
-    createRandom: jest.fn(() => ({
-      address: '0xMockCreatedWalletAddress',
-      privateKey: '0xMockCreatedPrivateKey',
-      index: 0,
-      path: "m/44'/60'/0'/0/0",
-      encrypt: mockWalletEncrypt,
-      neuter: mockWalletNeuter,
-    })),
+export const Wallet = {
+  createRandom: jest.fn(() => ({
+    address: '0xMockCreatedWalletAddress',
+    privateKey: '0xMockCreatedPrivateKey',
+    index: 0,
+    path: "m/44'/60'/0'/0/0",
+    encrypt: mockWalletEncrypt,
+    neuter: mockWalletNeuter,
+    getAddress: jest.fn(() => "0xMockCreatedWalletAddress"),
+  })),
 
-    fromEncryptedJson: jest.fn(() => Promise.resolve({
-      address: '0xMockDecryptedHDNodeAddress',
-      privateKey: '0xMockDecryptedHDPrivateKey',
-      index: 0,
-      path: "m/44'/60'/0'/0/0",
-      deriveChild: mockHDNodeWalletDeriveChild,
-      derivePath: mockHDNodeWalletDerivePath,
-      neuter: mockHDNodeWalletNeuter,
-    })),
-  },
-
-  // Mock JsonRpcProvider to control network calls
-  JsonRpcProvider: jest.fn(() => ({
-    send: mockJsonRpcProviderSend,
+  fromEncryptedJson: jest.fn(() => Promise.resolve({
+    address: '0xMockDecryptedHDNodeAddress',
+    privateKey: '0xMockDecryptedHDPrivateKey',
+    index: 0,
+    path: "m/44'/60'/0'/0/0",
+    deriveChild: mockHDNodeWalletDeriveChild,
+    derivePath: mockHDNodeWalletDerivePath,
+    neuter: mockHDNodeWalletNeuter,
   })),
 };
 
-export default ethers;
+
+export const JsonRpcProvider = jest.fn((url: string) => ({
+  rpcUrl: url,
+  send: mockJsonRpcProviderSend
+}));
