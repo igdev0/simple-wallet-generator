@@ -7,6 +7,7 @@ import {createDefaultPreset} from 'ts-jest';
 const tsJestTransformCfg = createDefaultPreset().transform;
 const config: Config = {
   preset: "ts-jest",
+  testEnvironment: "jsdom",
   verbose: true,
   transform: {
     ...tsJestTransformCfg
