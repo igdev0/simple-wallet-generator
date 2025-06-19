@@ -54,7 +54,6 @@ describe('wallet reducer', () => {
     const newAccount: Account = {
       name: 'Account 1',
       index: 0,
-      path: "m/44'/60'/0'/0/0",
       address: '0x00000...',
     };
     const action = generateAccount(newAccount);
@@ -64,7 +63,6 @@ describe('wallet reducer', () => {
     const anotherAccount: Account = {
       name: 'Account 2',
       index: 1,
-      path: "m/44'/60'/0'/0/1",
       address: '0x00000...',
     };
     const stateWithOneAccount = { ...initialState, accounts: [newAccount] };

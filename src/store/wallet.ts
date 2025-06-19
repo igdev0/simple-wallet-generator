@@ -6,7 +6,6 @@ import type {PersistConfig} from 'redux-persist/es/types';
 export interface Account {
   name: string;
   index: number;
-  path: string;
   address: string;
 }
 

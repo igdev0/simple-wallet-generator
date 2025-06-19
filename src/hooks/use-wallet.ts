@@ -44,7 +44,6 @@ export default function useWallet() {
       dispatch(generateAccount({
         index: wallet.index,
         address: wallet.address,
-        path: wallet.path as string,
         name: `Account ${wallet.index}`
       }));
       setMaster(wallet.neuter());
@@ -64,24 +63,8 @@ export default function useWallet() {
     dispatch(generateAccount({
       index: wallet.index,
       address: wallet.address,
-      path: wallet.path as string,
       name: `Account ${wallet.index}`
     }));
-  };
-
-  const getWallet = async (address: string) => {
-    if (!master) {
-      dispatch(setError("Master is required"));
-      return;
-    }
-    const account = store.accounts.find(account => account.address === address);
-
-    if (!account) {
-      dispatch(setError("Could not find account"));
-      return;
-    }
-
-    return master.derivePath(account.path);
   };
 
   const authenticate = async (formData: FormData) => {
@@ -139,7 +122,6 @@ export default function useWallet() {
     authenticate,
     getPrivateKey,
     generateWallet,
-    getWallet,
     generateRandomMasterEncrypted,
   };
 }
